@@ -37,6 +37,7 @@ pub mod renaming;
 pub mod rewriter;
 pub mod stats;
 pub mod visitors;
+pub mod vmt;
 
 /// SMT2 numeral values.
 pub type Numeral = num::bigint::BigUint;

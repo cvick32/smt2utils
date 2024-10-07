@@ -13,6 +13,8 @@ use std::path::PathBuf;
 use structopt::StructOpt;
 use strum::IntoEnumIterator;
 
+use smt2parser::vmt::VMTModel;
+
 #[derive(Debug, StructOpt)]
 #[structopt(
     name = "smt2bin",
@@ -56,6 +58,11 @@ enum Operation {
         #[structopt(parse(from_os_str))]
         inputs: Vec<PathBuf>,
     },
+    Vmt {
+        /// Path to the SMT2 files.
+        #[structopt(parse(from_os_str))]
+        input: PathBuf,
+    }
 }
 
 fn process_file<T, F>(state: T, file_path: PathBuf, mut f: F) -> std::io::Result<T>
@@ -92,6 +99,26 @@ fn read_words(path: Option<PathBuf>) -> std::io::Result<Vec<String>> {
 fn main() -> std::io::Result<()> {
     let options = Options::from_args();
     match options.operation {
+        Operation::Vmt { input } => {
+            let file = std::io::BufReader::new(std::fs::File::open(&input)?);
+            let command_stream = CommandStream::new(file, SyntaxBuilder, input.to_str().map(String::from));
+            let mut commands = vec![];
+            for result in command_stream {
+                match result {
+                    Ok(command) => commands.push(command),
+                    Err(_) => todo!(),
+                }
+            }
+            let vmt_model = VMTModel::checked_from(commands);
+            match vmt_model {
+                Ok(vm) => {
+                    vm.print_stats();
+                    vm.print_smtlib2();
+                }
+                Err(_) => panic!("Could not parse VMT.")
+            }
+        }
+
         Operation::Print {
             normalize_symbols,
             max_randomized_symbols,

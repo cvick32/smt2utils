@@ -531,6 +531,6 @@ fn test_keyword() {
 
 #[test]
 fn test_token_size() {
-    assert_eq!(std::mem::size_of::<Token>(), 72);
+    assert_eq!(std::mem::size_of::<Token>(), 64);
     assert_eq!(std::mem::size_of::<Box<Token>>(), 8);
 }

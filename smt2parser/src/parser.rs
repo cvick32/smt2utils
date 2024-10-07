@@ -359,6 +359,8 @@ pomelo! {
 
 #[cfg(test)]
 pub(crate) mod tests {
+    use num::BigUint;
+
     use super::*;
     use crate::{concrete::*, lexer::Lexer};
 
@@ -508,5 +510,33 @@ pub(crate) mod tests {
         // Test syntax visiting while we're at it.
         let mut builder = crate::concrete::SyntaxBuilder::default();
         assert_eq!(value, value.clone().accept(&mut builder).unwrap());
+    }
+
+    #[test]
+    fn test_attributes() {
+        let value = parse_tokens(Lexer::new(&b"(define-fun property () Bool (! (> Z 0) :invar-property 0))"[..])).unwrap();
+
+        match value {
+              Command::DefineFun { sig: _ , term } => {
+                match term {
+                    Term::Attributes { term: _, attributes } => {
+                        assert!(attributes.len() == 1);
+                        let keyword = &attributes[0].0.0;
+                        assert!(keyword == "invar-property");
+                        let value = &attributes[0].1;
+                        match value {
+                            AttributeValue::Constant(c) => match c {
+                                Constant::Numeral(big_uint) => assert!(big_uint.eq(&BigUint::from(0 as u8))),
+                                _ => assert!(false)
+                            }
+                            _ => assert!(false)
+                        }
+                    }
+                    _ => assert!(false)
+                }
+              }
+              _ => assert!(false)
+  
+        };
     }
 }
