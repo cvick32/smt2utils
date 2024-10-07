@@ -1,0 +1,30 @@
+(declare-sort id 0)
+(declare-fun a () (Array id id))
+(declare-fun new_a () (Array id id))
+(define-fun .a () (Array id id) (! a :next new_a))
+(declare-fun x () id)
+(declare-fun new_x () id)
+(define-fun .x () id (! x :next new_x))
+(declare-fun y () id)
+(declare-fun new_y () id)
+(define-fun .y () id (! y :next new_y))
+(declare-fun Z () id)
+(declare-fun new_Z () id)
+(define-fun .Z () id (! Z :next new_Z))
+
+
+(define-fun init () Bool (!
+     (= a ((as const (Array id id)) Z))
+     :init true))
+
+(define-fun trans () Bool
+  (!
+  (and
+    (= new_a (store a x (select a y)))
+    (= new_Z Z)
+  )
+  :trans true))
+
+(define-fun property () Bool
+  (! (= (select a x) Z)
+     :invar-property 0))
