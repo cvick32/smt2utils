@@ -1,0 +1,13 @@
+[package]
+name = "berty"
+version = "0.1.1"
+
+
+[dependencies]
+smt2parser = { path = "../smt2parser", version = "0.6.1" }
+z3 = "0.12.1"
+
+[[bin]]
+name = "berty"
+path = "src/main.rs"
+test = false
