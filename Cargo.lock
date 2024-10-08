@@ -73,6 +73,7 @@ version = "0.1.1"
 dependencies = [
  "smt2parser",
  "z3",
+ "z3tracer",
 ]
 
 [[package]]

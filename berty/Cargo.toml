@@ -5,6 +5,7 @@ version = "0.1.1"
 
 [dependencies]
 smt2parser = { path = "../smt2parser", version = "0.6.1" }
+z3tracer = { path = "../z3tracer" }
 z3 = "0.12.1"
 
 [[bin]]
