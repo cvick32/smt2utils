@@ -59,7 +59,7 @@ fn main() {
                 for timestamp in timestamps {
                     // Subtract 1 to get the reference to the actual term and not the application.
                     let term = timestamp_to_id.get(&(timestamp - 1)).unwrap();
-                    let decoded = decode_array_instantiation(&model, &term);
+                    let decoded = decode_array_instantiation(&model, term);
                     match decoded {
                         Ok(inst_decoded) => println!("timestamp {}: {}", timestamp, inst_decoded),
                         Err(_) => println!("Timestamp {} failed to decode!", timestamp),

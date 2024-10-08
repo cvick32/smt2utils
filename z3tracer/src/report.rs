@@ -303,7 +303,7 @@ where
                     None
                 }
             })
-            .map(|ts| (ts, values.binary_search(&ts).map_or_else(|x| x, |x| x)));
+            .map(|ts| (ts, values.binary_search(&ts).unwrap_or_else(|x| x)));
 
         let color: PaletteColor<Palette9999> = PaletteColor::pick(j);
         chart

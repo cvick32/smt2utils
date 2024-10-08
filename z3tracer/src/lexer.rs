@@ -77,7 +77,7 @@ where
     }
 
     fn peek_byte(&mut self) -> Option<&u8> {
-        self.peek_bytes().get(0)
+        self.peek_bytes().first()
     }
 
     fn skip_space(&mut self) -> bool {
