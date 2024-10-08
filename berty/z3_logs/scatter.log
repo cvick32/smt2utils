@@ -1,0 +1,707 @@
+[tool-version] Z3 4.8.16
+[mk-app] #1 true
+[mk-app] #2 false
+[mk-app] #1 true
+[mk-app] #2 false
+[mk-app] #3 pi
+[mk-app] #4 euler
+[mk-var] datatype#0 0
+[mk-var] datatype#1 1
+[mk-app] datatype#2 insert datatype#0 datatype#1
+[mk-app] datatype#3 pattern datatype#2
+[mk-app] datatype#4 head datatype#2
+[mk-app] datatype#5 = datatype#0 datatype#4
+[mk-quant] datatype#6 constructor_accessor_axiom 2 datatype#3 datatype#5
+[attach-var-names] datatype#6 (;k!0) (;List)
+[mk-app] datatype#7 tail datatype#2
+[mk-app] datatype#8 = datatype#1 datatype#7
+[mk-quant] datatype#9 constructor_accessor_axiom 2 datatype#3 datatype#8
+[attach-var-names] datatype#9 (;k!0) (;List)
+[mk-app] #5 bv
+[attach-meaning] #5 bv #b1
+[mk-app] #6 bv
+[attach-meaning] #6 bv #b0
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #6 bv #b0
+[mk-var] #7 0
+[mk-var] #8 1
+[mk-var] #9 2
+[mk-var] #10 3
+[mk-var] #11 4
+[mk-var] #12 5
+[mk-var] #13 6
+[mk-var] #14 7
+[mk-var] #15 8
+[mk-var] #16 9
+[mk-var] #17 10
+[mk-var] #18 11
+[mk-var] #19 12
+[mk-var] #20 13
+[mk-var] #21 14
+[mk-app] #22 + #15 #13
+[mk-proof] #23 true-axiom #1
+[attach-enode] #1 0
+[attach-enode] #2 0
+[mk-app] #24 a@0
+[mk-app] #25 Z@0
+[mk-app] #26 const #25
+[mk-app] #27 = #24 #26
+[mk-proof] #28 asserted #27
+[mk-app] #29 = #27 #27
+[mk-proof] #30 refl #29
+[mk-app] #29 a@1
+[mk-app] #30 x@0
+[mk-app] #31 y@0
+[mk-app] #32 select #24 #31
+[mk-app] #33 store #24 #30 #32
+[mk-app] #34 = #29 #33
+[mk-app] #35 Z@1
+[mk-app] #36 = #35 #25
+[mk-app] #37 and #34 #36
+[mk-proof] #38 asserted #37
+[mk-app] #39 = #37 #37
+[mk-proof] #40 refl #39
+[mk-proof] #39 and-elim #38 #34
+[mk-proof] #40 and-elim #38 #36
+[mk-app] #41 a@2
+[mk-app] #42 x@1
+[mk-app] #43 y@1
+[mk-app] #44 select #29 #43
+[mk-app] #45 store #29 #42 #44
+[mk-app] #46 = #41 #45
+[mk-app] #47 Z@2
+[mk-app] #48 = #47 #35
+[mk-app] #49 and #46 #48
+[mk-proof] #50 asserted #49
+[mk-app] #51 = #49 #49
+[mk-proof] #52 refl #51
+[mk-proof] #51 and-elim #50 #46
+[mk-proof] #52 and-elim #50 #48
+[mk-app] #53 a@3
+[mk-app] #54 x@2
+[mk-app] #55 y@2
+[mk-app] #56 select #41 #55
+[mk-app] #57 store #41 #54 #56
+[mk-app] #58 = #53 #57
+[mk-app] #59 Z@3
+[mk-app] #60 = #59 #47
+[mk-app] #61 and #58 #60
+[mk-proof] #62 asserted #61
+[mk-app] #63 = #61 #61
+[mk-proof] #64 refl #63
+[mk-proof] #63 and-elim #62 #58
+[mk-proof] #64 and-elim #62 #60
+[mk-app] #65 a@4
+[mk-app] #66 x@3
+[mk-app] #67 y@3
+[mk-app] #68 select #53 #67
+[mk-app] #69 store #53 #66 #68
+[mk-app] #70 = #65 #69
+[mk-app] #71 Z@4
+[mk-app] #72 = #71 #59
+[mk-app] #73 and #70 #72
+[mk-proof] #74 asserted #73
+[mk-app] #75 = #73 #73
+[mk-proof] #76 refl #75
+[mk-proof] #75 and-elim #74 #70
+[mk-proof] #76 and-elim #74 #72
+[mk-app] #77 a@5
+[mk-app] #78 x@4
+[mk-app] #79 y@4
+[mk-app] #80 select #65 #79
+[mk-app] #81 store #65 #78 #80
+[mk-app] #82 = #77 #81
+[mk-app] #83 Z@5
+[mk-app] #84 = #83 #71
+[mk-app] #85 and #82 #84
+[mk-proof] #86 asserted #85
+[mk-app] #87 = #85 #85
+[mk-proof] #88 refl #87
+[mk-proof] #87 and-elim #86 #82
+[mk-proof] #88 and-elim #86 #84
+[mk-app] #89 a@6
+[mk-app] #90 x@5
+[mk-app] #91 y@5
+[mk-app] #92 select #77 #91
+[mk-app] #93 store #77 #90 #92
+[mk-app] #94 = #89 #93
+[mk-app] #95 Z@6
+[mk-app] #96 = #95 #83
+[mk-app] #97 and #94 #96
+[mk-proof] #98 asserted #97
+[mk-app] #99 = #97 #97
+[mk-proof] #100 refl #99
+[mk-proof] #99 and-elim #98 #94
+[mk-proof] #100 and-elim #98 #96
+[mk-app] #101 a@7
+[mk-app] #102 x@6
+[mk-app] #103 y@6
+[mk-app] #104 select #89 #103
+[mk-app] #105 store #89 #102 #104
+[mk-app] #106 = #101 #105
+[mk-app] #107 Z@7
+[mk-app] #108 = #107 #95
+[mk-app] #109 and #106 #108
+[mk-proof] #110 asserted #109
+[mk-app] #111 = #109 #109
+[mk-proof] #112 refl #111
+[mk-proof] #111 and-elim #110 #106
+[mk-proof] #112 and-elim #110 #108
+[mk-app] #113 a@8
+[mk-app] #114 x@7
+[mk-app] #115 y@7
+[mk-app] #116 select #101 #115
+[mk-app] #117 store #101 #114 #116
+[mk-app] #118 = #113 #117
+[mk-app] #119 Z@8
+[mk-app] #120 = #119 #107
+[mk-app] #121 and #118 #120
+[mk-proof] #122 asserted #121
+[mk-app] #123 = #121 #121
+[mk-proof] #124 refl #123
+[mk-proof] #123 and-elim #122 #118
+[mk-proof] #124 and-elim #122 #120
+[mk-app] #125 a@9
+[mk-app] #126 x@8
+[mk-app] #127 y@8
+[mk-app] #128 select #113 #127
+[mk-app] #129 store #113 #126 #128
+[mk-app] #130 = #125 #129
+[mk-app] #131 Z@9
+[mk-app] #132 = #131 #119
+[mk-app] #133 and #130 #132
+[mk-proof] #134 asserted #133
+[mk-app] #135 = #133 #133
+[mk-proof] #136 refl #135
+[mk-proof] #135 and-elim #134 #130
+[mk-proof] #136 and-elim #134 #132
+[mk-app] #137 a@10
+[mk-app] #138 x@9
+[mk-app] #139 y@9
+[mk-app] #140 select #125 #139
+[mk-app] #141 store #125 #138 #140
+[mk-app] #142 = #137 #141
+[mk-app] #143 Z@10
+[mk-app] #144 = #143 #131
+[mk-app] #145 and #142 #144
+[mk-proof] #146 asserted #145
+[mk-app] #147 = #145 #145
+[mk-proof] #148 refl #147
+[mk-proof] #147 and-elim #146 #142
+[mk-proof] #148 and-elim #146 #144
+[mk-app] #149 x@10
+[mk-app] #150 select #137 #149
+[mk-app] #151 = #150 #143
+[mk-app] #152 not #151
+[mk-proof] #153 asserted #152
+[mk-app] #154 = #152 #152
+[mk-proof] #155 refl #154
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[mk-app] #154 = #27 #27
+[mk-proof] #155 refl #154
+[mk-app] #154 = #34 #34
+[mk-proof] #155 refl #154
+[mk-app] #154 = #36 #36
+[mk-proof] #155 refl #154
+[mk-app] #154 = #46 #46
+[mk-proof] #155 refl #154
+[mk-app] #154 = #48 #48
+[mk-proof] #155 refl #154
+[mk-app] #154 = #58 #58
+[mk-proof] #155 refl #154
+[mk-app] #154 = #60 #60
+[mk-proof] #155 refl #154
+[mk-app] #154 = #70 #70
+[mk-proof] #155 refl #154
+[mk-app] #154 = #72 #72
+[mk-proof] #155 refl #154
+[mk-app] #154 = #82 #82
+[mk-proof] #155 refl #154
+[mk-app] #154 = #84 #84
+[mk-proof] #155 refl #154
+[mk-app] #154 = #94 #94
+[mk-proof] #155 refl #154
+[mk-app] #154 = #96 #96
+[mk-proof] #155 refl #154
+[mk-app] #154 = #106 #106
+[mk-proof] #155 refl #154
+[mk-app] #154 = #108 #108
+[mk-proof] #155 refl #154
+[mk-app] #154 = #118 #118
+[mk-proof] #155 refl #154
+[mk-app] #154 = #120 #120
+[mk-proof] #155 refl #154
+[mk-app] #154 = #130 #130
+[mk-proof] #155 refl #154
+[mk-app] #154 = #132 #132
+[mk-proof] #155 refl #154
+[mk-app] #154 = #142 #142
+[mk-proof] #155 refl #154
+[mk-app] #154 = #144 #144
+[mk-proof] #155 refl #154
+[mk-app] #154 = #152 #152
+[mk-proof] #155 refl #154
+[mk-app] #154 = #27 #27
+[mk-proof] #155 refl #154
+[mk-app] #154 = #34 #34
+[mk-proof] #155 refl #154
+[mk-app] #154 = #36 #36
+[mk-proof] #155 refl #154
+[mk-app] #154 = #46 #46
+[mk-proof] #155 refl #154
+[mk-app] #154 = #48 #48
+[mk-proof] #155 refl #154
+[mk-app] #154 = #58 #58
+[mk-proof] #155 refl #154
+[mk-app] #154 = #60 #60
+[mk-proof] #155 refl #154
+[mk-app] #154 = #70 #70
+[mk-proof] #155 refl #154
+[mk-app] #154 = #72 #72
+[mk-proof] #155 refl #154
+[mk-app] #154 = #82 #82
+[mk-proof] #155 refl #154
+[mk-app] #154 = #84 #84
+[mk-proof] #155 refl #154
+[mk-app] #154 = #94 #94
+[mk-proof] #155 refl #154
+[mk-app] #154 = #96 #96
+[mk-proof] #155 refl #154
+[mk-app] #154 = #106 #106
+[mk-proof] #155 refl #154
+[mk-app] #154 = #108 #108
+[mk-proof] #155 refl #154
+[mk-app] #154 = #118 #118
+[mk-proof] #155 refl #154
+[mk-app] #154 = #120 #120
+[mk-proof] #155 refl #154
+[mk-app] #154 = #130 #130
+[mk-proof] #155 refl #154
+[mk-app] #154 = #132 #132
+[mk-proof] #155 refl #154
+[mk-app] #154 = #142 #142
+[mk-proof] #155 refl #154
+[mk-app] #154 = #144 #144
+[mk-proof] #155 refl #154
+[mk-app] #154 = #152 #152
+[mk-proof] #155 refl #154
+[mk-app] #154 = #27 #27
+[mk-proof] #155 rewrite #154
+[mk-proof] #156 mp #28 #155 #27
+[mk-app] #157 = #34 #34
+[mk-proof] #158 rewrite #157
+[mk-proof] #159 mp #39 #158 #34
+[mk-app] #160 = #36 #36
+[mk-proof] #161 rewrite #160
+[mk-proof] #162 mp #40 #161 #36
+[mk-app] #163 = #46 #46
+[mk-proof] #164 rewrite #163
+[mk-proof] #165 mp #51 #164 #46
+[mk-app] #166 = #48 #48
+[mk-proof] #167 rewrite #166
+[mk-proof] #168 mp #52 #167 #48
+[mk-app] #169 = #58 #58
+[mk-proof] #170 rewrite #169
+[mk-proof] #171 mp #63 #170 #58
+[mk-app] #172 = #60 #60
+[mk-proof] #173 rewrite #172
+[mk-proof] #174 mp #64 #173 #60
+[mk-app] #175 = #70 #70
+[mk-proof] #176 rewrite #175
+[mk-proof] #177 mp #75 #176 #70
+[mk-app] #178 = #72 #72
+[mk-proof] #179 rewrite #178
+[mk-proof] #180 mp #76 #179 #72
+[mk-app] #181 = #82 #82
+[mk-proof] #182 rewrite #181
+[mk-proof] #183 mp #87 #182 #82
+[mk-app] #184 = #84 #84
+[mk-proof] #185 rewrite #184
+[mk-proof] #186 mp #88 #185 #84
+[mk-app] #187 = #94 #94
+[mk-proof] #188 rewrite #187
+[mk-proof] #189 mp #99 #188 #94
+[mk-app] #190 = #96 #96
+[mk-proof] #191 rewrite #190
+[mk-proof] #192 mp #100 #191 #96
+[mk-app] #193 = #106 #106
+[mk-proof] #194 rewrite #193
+[mk-proof] #195 mp #111 #194 #106
+[mk-app] #196 = #108 #108
+[mk-proof] #197 rewrite #196
+[mk-proof] #198 mp #112 #197 #108
+[mk-app] #199 = #118 #118
+[mk-proof] #200 rewrite #199
+[mk-proof] #201 mp #123 #200 #118
+[mk-app] #202 = #120 #120
+[mk-proof] #203 rewrite #202
+[mk-proof] #204 mp #124 #203 #120
+[mk-app] #205 = #130 #130
+[mk-proof] #206 rewrite #205
+[mk-proof] #207 mp #135 #206 #130
+[mk-app] #208 = #132 #132
+[mk-proof] #209 rewrite #208
+[mk-proof] #210 mp #136 #209 #132
+[mk-app] #211 = #142 #142
+[mk-proof] #212 rewrite #211
+[mk-proof] #213 mp #147 #212 #142
+[mk-app] #214 = #144 #144
+[mk-proof] #215 rewrite #214
+[mk-proof] #216 mp #148 #215 #144
+[mk-app] #217 = #152 #152
+[mk-proof] #218 rewrite #217
+[mk-proof] #219 mp #153 #218 #152
+[mk-proof] #220 refl #154
+[mk-proof] #220 refl #157
+[mk-proof] #220 refl #160
+[mk-proof] #220 refl #163
+[mk-proof] #220 refl #166
+[mk-proof] #220 refl #169
+[mk-proof] #220 refl #172
+[mk-proof] #220 refl #175
+[mk-proof] #220 refl #178
+[mk-proof] #220 refl #181
+[mk-proof] #220 refl #184
+[mk-proof] #220 refl #187
+[mk-proof] #220 refl #190
+[mk-proof] #220 refl #193
+[mk-proof] #220 refl #196
+[mk-proof] #220 refl #199
+[mk-proof] #220 refl #202
+[mk-proof] #220 refl #205
+[mk-proof] #220 refl #208
+[mk-proof] #220 refl #211
+[mk-proof] #220 refl #214
+[mk-proof] #220 refl #217
+[mk-app] #220 = #26 #26
+[mk-proof] #221 refl #220
+[mk-app] #220 select #26 #31
+[mk-app] #221 = #32 #220
+[mk-proof] #222 monotonicity #156 #221
+[inst-discovered] theory-solving 0x0 array# ; #220
+[mk-app] #223 = #220 #25
+[instance] 0x0 #223
+[attach-enode] #223 0
+[end-of-instance]
+[mk-app] #223 = #220 #25
+[mk-proof] #224 rewrite #223
+[mk-app] #225 = #32 #25
+[mk-proof] #226 trans #222 #224 #225
+[mk-app] #227 store #26 #30 #25
+[mk-app] #228 = #33 #227
+[mk-proof] #229 monotonicity #156 #226 #228
+[inst-discovered] theory-solving 0x0 array# ; #227
+[mk-app] #230 = #227 #26
+[instance] 0x0 #230
+[attach-enode] #230 0
+[end-of-instance]
+[mk-app] #230 = #227 #26
+[mk-proof] #231 rewrite #230
+[mk-app] #232 = #33 #26
+[mk-proof] #233 trans #229 #231 #232
+[mk-app] #234 = #29 #26
+[mk-proof] #235 trans #159 #233 #234
+[mk-app] #236 = #25 #25
+[mk-proof] #237 refl #236
+[mk-app] #236 select #26 #43
+[mk-app] #237 = #44 #236
+[mk-proof] #238 monotonicity #235 #237
+[inst-discovered] theory-solving 0x0 array# ; #236
+[mk-app] #239 = #236 #25
+[instance] 0x0 #239
+[attach-enode] #239 0
+[end-of-instance]
+[mk-app] #239 = #236 #25
+[mk-proof] #240 rewrite #239
+[mk-app] #241 = #44 #25
+[mk-proof] #242 trans #238 #240 #241
+[mk-app] #243 store #26 #42 #25
+[mk-app] #244 = #45 #243
+[mk-proof] #245 monotonicity #235 #242 #244
+[inst-discovered] theory-solving 0x0 array# ; #243
+[mk-app] #246 = #243 #26
+[instance] 0x0 #246
+[attach-enode] #246 0
+[end-of-instance]
+[mk-app] #246 = #243 #26
+[mk-proof] #247 rewrite #246
+[mk-app] #248 = #45 #26
+[mk-proof] #249 trans #245 #247 #248
+[mk-app] #250 = #41 #26
+[mk-proof] #251 trans #165 #249 #250
+[mk-app] #252 = #47 #25
+[mk-proof] #253 trans #168 #162 #252
+[mk-app] #254 select #26 #55
+[mk-app] #255 = #56 #254
+[mk-proof] #256 monotonicity #251 #255
+[inst-discovered] theory-solving 0x0 array# ; #254
+[mk-app] #257 = #254 #25
+[instance] 0x0 #257
+[attach-enode] #257 0
+[end-of-instance]
+[mk-app] #257 = #254 #25
+[mk-proof] #258 rewrite #257
+[mk-app] #259 = #56 #25
+[mk-proof] #260 trans #256 #258 #259
+[mk-app] #261 store #26 #54 #25
+[mk-app] #262 = #57 #261
+[mk-proof] #263 monotonicity #251 #260 #262
+[inst-discovered] theory-solving 0x0 array# ; #261
+[mk-app] #264 = #261 #26
+[instance] 0x0 #264
+[attach-enode] #264 0
+[end-of-instance]
+[mk-app] #264 = #261 #26
+[mk-proof] #265 rewrite #264
+[mk-app] #266 = #57 #26
+[mk-proof] #267 trans #263 #265 #266
+[mk-app] #268 = #53 #26
+[mk-proof] #269 trans #171 #267 #268
+[mk-app] #270 = #59 #25
+[mk-proof] #271 trans #174 #253 #270
+[mk-app] #272 select #26 #67
+[mk-app] #273 = #68 #272
+[mk-proof] #274 monotonicity #269 #273
+[inst-discovered] theory-solving 0x0 array# ; #272
+[mk-app] #275 = #272 #25
+[instance] 0x0 #275
+[attach-enode] #275 0
+[end-of-instance]
+[mk-app] #275 = #272 #25
+[mk-proof] #276 rewrite #275
+[mk-app] #277 = #68 #25
+[mk-proof] #278 trans #274 #276 #277
+[mk-app] #279 store #26 #66 #25
+[mk-app] #280 = #69 #279
+[mk-proof] #281 monotonicity #269 #278 #280
+[inst-discovered] theory-solving 0x0 array# ; #279
+[mk-app] #282 = #279 #26
+[instance] 0x0 #282
+[attach-enode] #282 0
+[end-of-instance]
+[mk-app] #282 = #279 #26
+[mk-proof] #283 rewrite #282
+[mk-app] #284 = #69 #26
+[mk-proof] #285 trans #281 #283 #284
+[mk-app] #286 = #65 #26
+[mk-proof] #287 trans #177 #285 #286
+[mk-app] #288 = #71 #25
+[mk-proof] #289 trans #180 #271 #288
+[mk-app] #290 select #26 #79
+[mk-app] #291 = #80 #290
+[mk-proof] #292 monotonicity #287 #291
+[inst-discovered] theory-solving 0x0 array# ; #290
+[mk-app] #293 = #290 #25
+[instance] 0x0 #293
+[attach-enode] #293 0
+[end-of-instance]
+[mk-app] #293 = #290 #25
+[mk-proof] #294 rewrite #293
+[mk-app] #295 = #80 #25
+[mk-proof] #296 trans #292 #294 #295
+[mk-app] #297 store #26 #78 #25
+[mk-app] #298 = #81 #297
+[mk-proof] #299 monotonicity #287 #296 #298
+[inst-discovered] theory-solving 0x0 array# ; #297
+[mk-app] #300 = #297 #26
+[instance] 0x0 #300
+[attach-enode] #300 0
+[end-of-instance]
+[mk-app] #300 = #297 #26
+[mk-proof] #301 rewrite #300
+[mk-app] #302 = #81 #26
+[mk-proof] #303 trans #299 #301 #302
+[mk-app] #304 = #77 #26
+[mk-proof] #305 trans #183 #303 #304
+[mk-app] #306 = #83 #25
+[mk-proof] #307 trans #186 #289 #306
+[mk-app] #308 select #26 #91
+[mk-app] #309 = #92 #308
+[mk-proof] #310 monotonicity #305 #309
+[inst-discovered] theory-solving 0x0 array# ; #308
+[mk-app] #311 = #308 #25
+[instance] 0x0 #311
+[attach-enode] #311 0
+[end-of-instance]
+[mk-app] #311 = #308 #25
+[mk-proof] #312 rewrite #311
+[mk-app] #313 = #92 #25
+[mk-proof] #314 trans #310 #312 #313
+[mk-app] #315 store #26 #90 #25
+[mk-app] #316 = #93 #315
+[mk-proof] #317 monotonicity #305 #314 #316
+[inst-discovered] theory-solving 0x0 array# ; #315
+[mk-app] #318 = #315 #26
+[instance] 0x0 #318
+[attach-enode] #318 0
+[end-of-instance]
+[mk-app] #318 = #315 #26
+[mk-proof] #319 rewrite #318
+[mk-app] #320 = #93 #26
+[mk-proof] #321 trans #317 #319 #320
+[mk-app] #322 = #89 #26
+[mk-proof] #323 trans #189 #321 #322
+[mk-app] #324 = #95 #25
+[mk-proof] #325 trans #192 #307 #324
+[mk-app] #326 select #26 #103
+[mk-app] #327 = #104 #326
+[mk-proof] #328 monotonicity #323 #327
+[inst-discovered] theory-solving 0x0 array# ; #326
+[mk-app] #329 = #326 #25
+[instance] 0x0 #329
+[attach-enode] #329 0
+[end-of-instance]
+[mk-app] #329 = #326 #25
+[mk-proof] #330 rewrite #329
+[mk-app] #331 = #104 #25
+[mk-proof] #332 trans #328 #330 #331
+[mk-app] #333 store #26 #102 #25
+[mk-app] #334 = #105 #333
+[mk-proof] #335 monotonicity #323 #332 #334
+[inst-discovered] theory-solving 0x0 array# ; #333
+[mk-app] #336 = #333 #26
+[instance] 0x0 #336
+[attach-enode] #336 0
+[end-of-instance]
+[mk-app] #336 = #333 #26
+[mk-proof] #337 rewrite #336
+[mk-app] #338 = #105 #26
+[mk-proof] #339 trans #335 #337 #338
+[mk-app] #340 = #101 #26
+[mk-proof] #341 trans #195 #339 #340
+[mk-app] #342 = #107 #25
+[mk-proof] #343 trans #198 #325 #342
+[mk-app] #344 select #26 #115
+[mk-app] #345 = #116 #344
+[mk-proof] #346 monotonicity #341 #345
+[inst-discovered] theory-solving 0x0 array# ; #344
+[mk-app] #347 = #344 #25
+[instance] 0x0 #347
+[attach-enode] #347 0
+[end-of-instance]
+[mk-app] #347 = #344 #25
+[mk-proof] #348 rewrite #347
+[mk-app] #349 = #116 #25
+[mk-proof] #350 trans #346 #348 #349
+[mk-app] #351 store #26 #114 #25
+[mk-app] #352 = #117 #351
+[mk-proof] #353 monotonicity #341 #350 #352
+[inst-discovered] theory-solving 0x0 array# ; #351
+[mk-app] #354 = #351 #26
+[instance] 0x0 #354
+[attach-enode] #354 0
+[end-of-instance]
+[mk-app] #354 = #351 #26
+[mk-proof] #355 rewrite #354
+[mk-app] #356 = #117 #26
+[mk-proof] #357 trans #353 #355 #356
+[mk-app] #358 = #113 #26
+[mk-proof] #359 trans #201 #357 #358
+[mk-app] #360 = #119 #25
+[mk-proof] #361 trans #204 #343 #360
+[mk-app] #362 select #26 #127
+[mk-app] #363 = #128 #362
+[mk-proof] #364 monotonicity #359 #363
+[inst-discovered] theory-solving 0x0 array# ; #362
+[mk-app] #365 = #362 #25
+[instance] 0x0 #365
+[attach-enode] #365 0
+[end-of-instance]
+[mk-app] #365 = #362 #25
+[mk-proof] #366 rewrite #365
+[mk-app] #367 = #128 #25
+[mk-proof] #368 trans #364 #366 #367
+[mk-app] #369 store #26 #126 #25
+[mk-app] #370 = #129 #369
+[mk-proof] #371 monotonicity #359 #368 #370
+[inst-discovered] theory-solving 0x0 array# ; #369
+[mk-app] #372 = #369 #26
+[instance] 0x0 #372
+[attach-enode] #372 0
+[end-of-instance]
+[mk-app] #372 = #369 #26
+[mk-proof] #373 rewrite #372
+[mk-app] #374 = #129 #26
+[mk-proof] #375 trans #371 #373 #374
+[mk-app] #376 = #125 #26
+[mk-proof] #377 trans #207 #375 #376
+[mk-app] #378 = #131 #25
+[mk-proof] #379 trans #210 #361 #378
+[mk-app] #380 select #26 #139
+[mk-app] #381 = #140 #380
+[mk-proof] #382 monotonicity #377 #381
+[inst-discovered] theory-solving 0x0 array# ; #380
+[mk-app] #383 = #380 #25
+[instance] 0x0 #383
+[attach-enode] #383 0
+[end-of-instance]
+[mk-app] #383 = #380 #25
+[mk-proof] #384 rewrite #383
+[mk-app] #385 = #140 #25
+[mk-proof] #386 trans #382 #384 #385
+[mk-app] #387 store #26 #138 #25
+[mk-app] #388 = #141 #387
+[mk-proof] #389 monotonicity #377 #386 #388
+[inst-discovered] theory-solving 0x0 array# ; #387
+[mk-app] #390 = #387 #26
+[instance] 0x0 #390
+[attach-enode] #390 0
+[end-of-instance]
+[mk-app] #390 = #387 #26
+[mk-proof] #391 rewrite #390
+[mk-app] #392 = #141 #26
+[mk-proof] #393 trans #389 #391 #392
+[mk-app] #394 = #137 #26
+[mk-proof] #395 trans #213 #393 #394
+[mk-app] #396 = #143 #25
+[mk-proof] #397 trans #216 #379 #396
+[mk-app] #398 select #26 #149
+[mk-app] #399 = #150 #398
+[mk-proof] #400 monotonicity #395 #399
+[inst-discovered] theory-solving 0x0 array# ; #398
+[mk-app] #401 = #398 #25
+[instance] 0x0 #401
+[attach-enode] #401 0
+[end-of-instance]
+[mk-app] #401 = #398 #25
+[mk-proof] #402 rewrite #401
+[mk-app] #403 = #150 #25
+[mk-proof] #404 trans #400 #402 #403
+[mk-app] #405 = #25 #25
+[mk-app] #406 = #151 #405
+[mk-proof] #407 monotonicity #404 #397 #406
+[inst-discovered] theory-solving 0x0 user-sort# ; #405
+[mk-app] #408 = #405 #1
+[instance] 0x0 #408
+[attach-enode] #408 0
+[end-of-instance]
+[mk-app] #408 = #405 #1
+[mk-proof] #409 rewrite #408
+[mk-app] #410 = #151 #1
+[mk-proof] #411 trans #407 #409 #410
+[mk-app] #412 not #1
+[mk-app] #413 = #152 #412
+[mk-proof] #414 monotonicity #411 #413
+[inst-discovered] theory-solving 0x0 basic# ; #412
+[mk-app] #415 = #412 #2
+[instance] 0x0 #415
+[attach-enode] #415 0
+[end-of-instance]
+[mk-app] #415 = #412 #2
+[mk-proof] #416 rewrite #415
+[mk-app] #417 = #152 #2
+[mk-proof] #418 trans #414 #416 #417
+[mk-proof] #419 mp #219 #418 #2
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[eof]
