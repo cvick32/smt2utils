@@ -68,9 +68,24 @@ pub mod parser;
 /// Terms and data structures found in Z3 logs.
 pub mod syntax;
 
-/// *Experimental* helper functions to generate reports.
-#[cfg(feature = "report")]
 pub mod report;
 
 pub use error::{Error, Result};
 pub use model::{Model, ModelConfig};
+use report::{IntoIterSorted, ModelExt};
+
+// Compute top instantiated terms and retrieve the "timestamps" at which instantiations occur for each of the top terms.
+pub fn get_instantiations(model: &Model) -> Vec<(String, Vec<usize>)> {
+    IntoIterSorted::from(model.most_instantiated_terms())
+        .map(|(_count, id)| {
+            let mut timestamps = model
+                .term_data(&id)
+                .unwrap()
+                .instantiation_timestamps
+                .clone();
+            timestamps.sort_unstable();
+            let name = model.id2name(&id).unwrap_or_else(|| "??".to_string());
+            (name, timestamps)
+        })
+        .collect()
+}

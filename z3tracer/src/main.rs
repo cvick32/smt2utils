@@ -76,22 +76,6 @@ struct Options {
     inputs: Vec<PathBuf>,
 }
 
-// Compute top instantiated terms and retrieve the "timestamps" at which instantiations occur for each of the top terms.
-fn get_instantiations(model: &Model) -> Vec<(String, Vec<usize>)> {
-    IntoIterSorted::from(model.most_instantiated_terms())
-        .map(|(_count, id)| {
-            let mut timestamps = model
-                .term_data(&id)
-                .unwrap()
-                .instantiation_timestamps
-                .clone();
-            timestamps.sort_unstable();
-            let name = model.id2name(&id).unwrap_or_else(|| "??".to_string());
-            (name, timestamps)
-        })
-        .collect()
-}
-
 fn get_dependency_graph(
     model: &Model,
     with_conflicts: bool,
