@@ -113,7 +113,9 @@ fn main() -> std::io::Result<()> {
             match vmt_model {
                 Ok(vm) => {
                     vm.print_stats();
-                    vm.print_smtlib2();
+                    vm.print_raw_smtlib2();
+                    let smt = vm.unroll(10);
+                    println!("{}", smt.to_smtlib2());
                 }
                 Err(_) => panic!("Could not parse VMT.")
             }
