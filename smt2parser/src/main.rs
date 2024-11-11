@@ -4,10 +4,7 @@
 #![forbid(unsafe_code)]
 
 use smt2parser::{
-    concrete::SyntaxBuilder,
-    renaming::{SymbolNormalizer, SymbolNormalizerConfig, TesterModernizer},
-    stats::Smt2Counters,
-    CommandStream,
+    concrete::SyntaxBuilder, get_commands, renaming::{SymbolNormalizer, SymbolNormalizerConfig, TesterModernizer}, stats::Smt2Counters, CommandStream
 };
 use std::path::PathBuf;
 use structopt::StructOpt;
@@ -62,7 +59,7 @@ enum Operation {
         /// Path to the SMT2 files.
         #[structopt(parse(from_os_str))]
         input: PathBuf,
-    }
+    },
 }
 
 fn process_file<T, F>(state: T, file_path: PathBuf, mut f: F) -> std::io::Result<T>
@@ -100,15 +97,9 @@ fn main() -> std::io::Result<()> {
     let options = Options::from_args();
     match options.operation {
         Operation::Vmt { input } => {
-            let file = std::io::BufReader::new(std::fs::File::open(&input)?);
-            let command_stream = CommandStream::new(file, SyntaxBuilder, input.to_str().map(String::from));
-            let mut commands = vec![];
-            for result in command_stream {
-                match result {
-                    Ok(command) => commands.push(command),
-                    Err(_) => todo!(),
-                }
-            }
+            let filename = String::from(input.to_str().unwrap());
+            let content = std::io::BufReader::new(std::fs::File::open(&input)?);
+            let commands = get_commands(content, filename);
             let vmt_model = VMTModel::checked_from(commands);
             match vmt_model {
                 Ok(vm) => {
@@ -117,7 +108,7 @@ fn main() -> std::io::Result<()> {
                     let smt = vm.unroll(10);
                     println!("{}", smt.to_smtlib2());
                 }
-                Err(_) => panic!("Could not parse VMT.")
+                Err(_) => panic!("Could not parse VMT."),
             }
         }
 

@@ -50,10 +50,30 @@ pub type Hexadecimal = Vec<Nibble>;
 /// SMT2 binary values.
 pub type Binary = Vec<bool>;
 
+use std::{fs::File, io::BufReader};
+
 /// A minimal error type.
 pub use concrete::Error;
+use concrete::SyntaxBuilder;
 /// A position in the input.
 pub use lexer::Position;
+
+pub fn get_commands(
+    content: BufReader<File>,
+    filename: String,
+) -> Vec<crate::concrete::Command> {
+    let command_stream =
+        CommandStream::new(content, SyntaxBuilder, Some(filename));
+    let mut commands = vec![];
+    for result in command_stream {
+        match result {
+            Ok(command) => commands.push(command),
+            Err(_) => todo!(),
+        }
+    }
+    commands
+}
+
 
 /// Parse the input data and return a stream of interpreted SMT2 commands
 pub struct CommandStream<R, T>
