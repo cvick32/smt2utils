@@ -68,8 +68,6 @@ impl crate::rewriter::Rewriter for ArrayAbstractor {
                 }
             },
             crate::concrete::QualIdentifier::Sorted { identifier, sort: _ } =>  {
-                println!("{}", qual_identifier);
-                println!("hehe {}", identifier.to_string());
                 if identifier.to_string() == "const" {
                     simple_identifier_with_name("ConstArr-Int-Int")
                 } else {
