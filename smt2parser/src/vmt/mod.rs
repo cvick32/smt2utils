@@ -1,13 +1,14 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use action::Action;
+use array_abstractor::ArrayAbstractor;
 use bmc::BMCBuilder;
 use smt::SMTProblem;
 use utils::{get_transition_system_component, get_variables_and_actions};
 use variable::Variable;
 
 use crate::{
-    concrete::{Command, Symbol, SyntaxBuilder, Term},
+    concrete::{Command, FunctionDec, Identifier, Sort, Symbol, SyntaxBuilder, Term},
     lexer::Lexer,
 };
 
@@ -15,11 +16,12 @@ static PROPERTY_ATTRIBUTE: &str = "invar-property";
 static TRANSITION_ATTRIBUTE: &str = "trans";
 static INITIAL_ATTRIBUTE: &str = "init";
 
+mod action;
+mod array_abstractor;
+mod bmc;
 mod smt;
 mod utils;
 mod variable;
-mod action;
-mod bmc;
 
 /// VMTModel represents a transition system given in VMT format.
 /// The VMT specification is no longer available but there is an example here:
@@ -88,57 +90,19 @@ impl VMTModel {
         })
     }
 
+    /// Clones the current model, rewrites all usages of Arrays into uninterpreted functions
+    /// and returns the abstracted VMTModel.
     pub fn abstract_array_theory(&self) -> VMTModel {
-        self.clone()
-    }
-
-    pub fn print_stats(&self) {
-        println!("Number of Variables: {}", self.state_variables.len());
-        println!("Number of Actions: {}", self.actions.len());
-        println!("Number of Sorts: {}", self.sorts.len());
-    }
-
-    pub fn print_raw_smtlib2(&self) {
-        for sort in &self.sorts {
-            println!("{}", sort.clone().accept(&mut SyntaxBuilder).unwrap())
+        let abstract_model = self.clone();
+        let mut abstractor = ArrayAbstractor {
+            visitor: SyntaxBuilder,
+            array_types: HashSet::new(),
+        };
+        let mut abstracted_commands = vec![];
+        for command in abstract_model.as_commands() {
+            abstracted_commands.push(command.accept(&mut abstractor).unwrap());
         }
-        for var in &self.state_variables {
-            println!(
-                "{}",
-                var.current.clone().accept(&mut SyntaxBuilder).unwrap()
-            );
-        }
-        for action in &self.actions {
-            println!(
-                "{}",
-                action
-                    .action_command
-                    .clone()
-                    .accept(&mut SyntaxBuilder)
-                    .unwrap()
-            );
-        }
-        println!(
-            "INIT: {}",
-            self.initial_condition
-                .clone()
-                .accept(&mut SyntaxBuilder)
-                .unwrap()
-        );
-        println!(
-            "TRANS: {}",
-            self.transition_condition
-                .clone()
-                .accept(&mut SyntaxBuilder)
-                .unwrap()
-        );
-        println!(
-            "PROP: {}",
-            self.property_condition
-                .clone()
-                .accept(&mut SyntaxBuilder)
-                .unwrap()
-        );
+        VMTModel::checked_from(abstracted_commands).unwrap()
     }
 
     pub fn unroll(&self, length: u8) -> SMTProblem {
@@ -167,6 +131,102 @@ impl VMTModel {
             length
         );
         smt_problem
+    }
+
+    pub fn as_commands(&self) -> Vec<Command> {
+        let mut commands = self.sorts.clone();
+        for variable in self.state_variables.clone() {
+            commands.extend(variable.as_commands());
+        }
+        for action in self.actions.clone() {
+            commands.extend(action.as_commands());
+        }
+        let init_command = Command::DefineFun {
+            sig: FunctionDec {
+                name: Symbol(format!("init")),
+                parameters: vec![],
+                result: Sort::Simple {
+                    identifier: Identifier::Simple {
+                        symbol: Symbol(format!("Bool")),
+                    },
+                },
+            },
+            term: self.initial_condition.clone(),
+        };
+        commands.push(init_command);
+        let trans_command = Command::DefineFun {
+            sig: FunctionDec {
+                name: Symbol(format!("trans")),
+                parameters: vec![],
+                result: Sort::Simple {
+                    identifier: Identifier::Simple {
+                        symbol: Symbol(format!("Bool")),
+                    },
+                },
+            },
+            term: self.transition_condition.clone(),
+        };
+        commands.push(trans_command);
+        let prop_command = Command::DefineFun {
+            sig: FunctionDec {
+                name: Symbol(format!("prop")),
+                parameters: vec![],
+                result: Sort::Simple {
+                    identifier: Identifier::Simple {
+                        symbol: Symbol(format!("Bool")),
+                    },
+                },
+            },
+            term: self.property_condition.clone(),
+        };
+        commands.push(prop_command);
+
+        commands
+    }
+
+    pub fn print_stats(&self) {
+        println!("Number of Variables: {}", self.state_variables.len());
+        println!("Number of Actions: {}", self.actions.len());
+        println!("Number of Sorts: {}", self.sorts.len());
+    }
+
+    pub fn print_raw_smtlib2(&self) {
+        for sort in &self.sorts {
+            println!("{}", sort.clone().accept(&mut SyntaxBuilder).unwrap())
+        }
+        for var in &self.state_variables {
+            println!(
+                "{}",
+                var.current.clone().accept(&mut SyntaxBuilder).unwrap()
+            );
+        }
+        for action in &self.actions {
+            println!(
+                "{}",
+                action.action.clone().accept(&mut SyntaxBuilder).unwrap()
+            );
+        }
+        println!(
+            "INIT: {}",
+            self.initial_condition
+                .clone()
+                .accept(&mut SyntaxBuilder)
+                .unwrap()
+        );
+        println!(
+            "TRANS: {}",
+            self.transition_condition
+                .clone()
+                .accept(&mut SyntaxBuilder)
+                .unwrap()
+        );
+        println!(
+            "PROP: {}",
+            self.property_condition
+                .clone()
+                .accept(&mut SyntaxBuilder)
+                .unwrap()
+        );
     }
 
     fn get_all_current_variable_names(&self) -> Vec<String> {

@@ -47,7 +47,7 @@ impl SMTProblem {
             self.definitions.push(definition_at_time);
         }
         for action in actions {
-            let action_at_time = action.action_command.clone().accept(&mut builder).unwrap();
+            let action_at_time = action.action.clone().accept(&mut builder).unwrap();
             self.definitions.push(action_at_time);
         }
     }

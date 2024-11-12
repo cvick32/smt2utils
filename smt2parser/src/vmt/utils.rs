@@ -38,6 +38,7 @@ pub fn get_variables_and_actions(
                         state_variables.push(Variable {
                             current: variable_command,
                             next: new_variable_command,
+                            relationship: variable_relationship.clone(),
                         });
                     } else if keyword_string == ":action" {
                         let action_variable_name = scrub_variable_name(term.to_string());
@@ -45,7 +46,8 @@ pub fn get_variables_and_actions(
                             for (variable_name, action_command) in &variable_commands {
                                 if action_variable_name == *variable_name {
                                     actions.push(Action {
-                                        action_command: action_command.clone(),
+                                        action: action_command.clone(),
+                                        relationship: variable_relationship.clone(),
                                     });
                                     break;
                                 }
@@ -95,9 +97,15 @@ pub fn get_transition_system_component(command: &Command, attribute: &str) -> Te
             Command::DefineFun { sig: _, term } => match term {
                 Term::Attributes {
                     term,
-                    attributes: _,
+                    attributes,
                 } => {
-                    return *term.clone();
+                    if attributes[0].0.0 != attribute {
+                        panic!(
+                            "Ill-formed system component: {}.\nShould have {} as attribute.",
+                            command, attribute
+                        );
+                    }
+                    return Term::Attributes { term: term.clone(), attributes: attributes.clone() }
                 }
                 _ => panic!("{}: Must have attribute.", attribute),
             },

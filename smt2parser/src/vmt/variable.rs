@@ -5,6 +5,7 @@ use crate::concrete::Command;
 pub struct Variable {
     pub current: Command,
     pub next: Command,
+    pub relationship: Command,
 }
 
 impl Variable {
@@ -32,5 +33,9 @@ impl Variable {
             }
             _ => panic!("Variable's next Command must be DeclareFun."),
         }
+    }
+    
+    pub(crate) fn as_commands(&self) -> Vec<Command> {
+        vec![self.current.clone(), self.next.clone(), self.relationship.clone()]
     }
 }

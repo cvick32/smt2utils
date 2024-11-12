@@ -106,7 +106,9 @@ fn main() -> std::io::Result<()> {
                     vm.print_stats();
                     vm.print_raw_smtlib2();
                     let smt = vm.unroll(10);
-                    println!("{}", smt.to_smtlib2());
+                    let abs = vm.abstract_array_theory();
+                    abs.print_raw_smtlib2();
+
                 }
                 Err(_) => panic!("Could not parse VMT."),
             }
