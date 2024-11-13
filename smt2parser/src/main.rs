@@ -104,10 +104,11 @@ fn main() -> std::io::Result<()> {
             match vmt_model {
                 Ok(vm) => {
                     vm.print_stats();
-                    vm.print_raw_smtlib2();
+                    println!("{}", vm.as_vmt_string());
                     let smt = vm.unroll(10);
                     let abs = vm.abstract_array_theory();
-                    abs.print_raw_smtlib2();
+                    println!("{}", abs.as_vmt_string());
+                    let abs_smt = abs.unroll(10);
 
                 }
                 Err(_) => panic!("Could not parse VMT."),

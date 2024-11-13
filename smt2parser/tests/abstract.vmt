@@ -1,3 +1,7 @@
+(declare-sort Arr-Int-Int 0)
+(declare-fun ConstArr-Int (Int) ConstArr-Int-Int)
+(declare-fun Read-Int-Int (Arr-Int-Int Int) Int)
+(declare-fun Write-Int-Int (Arr-Int-Int Int Int) Arr-Int-Int)
 (declare-fun a () Arr-Int-Int)
 (declare-fun new_a () Arr-Int-Int)
 (define-fun .a () Arr-Int-Int (! a :next new_a))

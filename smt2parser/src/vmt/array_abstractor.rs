@@ -1,16 +1,49 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
-use crate::concrete::{Command, Identifier, QualIdentifier, Symbol, SyntaxBuilder, Term};
+use num::{BigUint, Zero};
 
+use crate::concrete::{Command, Identifier, QualIdentifier, Sort, Symbol, SyntaxBuilder, Term};
+
+/// Rewrites Commands to use uninterpreted functions instead of explicit Arrays.
+/// Currently turns all Arrays into Arr-Int-Int, but will be extended to arbitrary
+/// Arrays later.
 #[derive(Clone)]
 pub struct ArrayAbstractor {
     pub visitor: SyntaxBuilder,
-    pub array_types: HashSet<String>,
+    pub array_types: HashMap<String, String>,
 }
-
 impl ArrayAbstractor {
-    pub fn add_array_type(&mut self, array_type: String) {
-        self.array_types.insert(array_type);
+    pub(crate) fn get_array_type_definitions(&self) -> Vec<Command> {
+        let mut commands = vec![];
+        for (index, value) in &self.array_types {
+            let arr_sort = Sort::Simple { identifier: Identifier::Simple { symbol: Symbol(format!("Array-{}-{}", index, value)) } };
+            let index_sort = Sort::Simple { identifier: Identifier::Simple { symbol: Symbol(format!("{}", index)) } };
+            let value_sort = Sort::Simple { identifier: Identifier::Simple { symbol: Symbol(format!("{}", value)) } };
+            let sort_definition = Command::DeclareSort {
+                symbol: Symbol(format!("Array-{}-{}", index, value)),
+                arity: BigUint::zero(),
+            };
+            let read_definition: Command = Command::DeclareFun {
+                symbol: Symbol(format!("Read-{}-{}", index, value)),
+                parameters: vec![arr_sort.clone(), index_sort.clone()],
+                sort: value_sort.clone(),
+            };
+            let write_definition: Command = Command::DeclareFun {
+                symbol: Symbol(format!("Write-{}-{}", index, value)),
+                parameters: vec![arr_sort.clone(), index_sort.clone(), value_sort.clone()],
+                sort: arr_sort.clone(),
+            };
+            let constarr_definition: Command = Command::DeclareFun {
+                symbol: Symbol(format!("ConstArr-{}-{}", index, value)),
+                parameters: vec![value_sort],
+                sort: arr_sort,
+            };
+            commands.push(sort_definition);
+            commands.push(constarr_definition);
+            commands.push(read_definition);
+            commands.push(write_definition);
+        }
+        commands
     }
 }
 
@@ -66,8 +99,11 @@ impl crate::rewriter::Rewriter for ArrayAbstractor {
                 } else {
                     qual_identifier
                 }
-            },
-            crate::concrete::QualIdentifier::Sorted { identifier, sort: _ } =>  {
+            }
+            crate::concrete::QualIdentifier::Sorted {
+                identifier,
+                sort: _,
+            } => {
                 if identifier.to_string() == "const" {
                     simple_identifier_with_name("ConstArr-Int-Int")
                 } else {
@@ -83,5 +119,9 @@ impl crate::rewriter::Rewriter for ArrayAbstractor {
 }
 
 fn simple_identifier_with_name(name: &str) -> QualIdentifier {
-    crate::concrete::QualIdentifier::Simple { identifier: Identifier::Simple { symbol: Symbol(format!("{}", name)) } }
+    crate::concrete::QualIdentifier::Simple {
+        identifier: Identifier::Simple {
+            symbol: Symbol(format!("{}", name)),
+        },
+    }
 }

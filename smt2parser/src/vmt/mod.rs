@@ -3,6 +3,7 @@ use std::collections::{HashMap, HashSet};
 use action::Action;
 use array_abstractor::ArrayAbstractor;
 use bmc::BMCBuilder;
+use itertools::Itertools;
 use smt::SMTProblem;
 use utils::{get_transition_system_component, get_variables_and_actions};
 use variable::Variable;
@@ -30,6 +31,7 @@ mod variable;
 pub struct VMTModel {
     sorts: Vec<Command>,
     state_variables: Vec<Variable>,
+    function_definitions: Vec<Command>,
     actions: Vec<Action>,
     initial_condition: Term,
     transition_condition: Term,
@@ -51,16 +53,21 @@ impl VMTModel {
         let mut variable_commands: HashMap<String, Command> = HashMap::new();
         let mut sorts: Vec<Command> = vec![];
         let mut variable_relationships = vec![];
+        let mut function_definitions = vec![];
         for (i, command) in commands.iter().enumerate() {
             if i < number_of_commands - 3 {
                 // Check whether a variable should be action, state, or local
                 match command {
                     Command::DeclareFun {
                         symbol,
-                        parameters: _,
+                        parameters,
                         sort: _,
                     } => {
-                        variable_commands.insert(symbol.0.clone(), command.clone());
+                        if parameters.len() == 0 {
+                            variable_commands.insert(symbol.0.clone(), command.clone());
+                        } else {
+                            function_definitions.push(command.clone());
+                        }
                     }
                     Command::DefineFun { sig: _, term: _ } => {
                         variable_relationships.push(command);
@@ -82,6 +89,7 @@ impl VMTModel {
 
         Ok(VMTModel {
             sorts,
+            function_definitions,
             state_variables,
             actions,
             initial_condition,
@@ -94,15 +102,19 @@ impl VMTModel {
     /// and returns the abstracted VMTModel.
     pub fn abstract_array_theory(&self) -> VMTModel {
         let abstract_model = self.clone();
+        let mut array_types: HashMap<String, String> = HashMap::new();
+        array_types.insert("Int".to_string(), "Int".to_string());
         let mut abstractor = ArrayAbstractor {
             visitor: SyntaxBuilder,
-            array_types: HashSet::new(),
+            array_types,
         };
         let mut abstracted_commands = vec![];
         for command in abstract_model.as_commands() {
             abstracted_commands.push(command.accept(&mut abstractor).unwrap());
         }
-        VMTModel::checked_from(abstracted_commands).unwrap()
+        let mut array_definitions = abstractor.get_array_type_definitions();
+        array_definitions.extend(abstracted_commands);
+        VMTModel::checked_from(array_definitions).unwrap()
     }
 
     pub fn unroll(&self, length: u8) -> SMTProblem {
@@ -112,17 +124,17 @@ impl VMTModel {
             next_variables: self.get_all_next_variable_names(),
             step: 0,
         };
-        let mut smt_problem = SMTProblem::new(&self.sorts);
+        let mut smt_problem = SMTProblem::new(&self.sorts, &self.function_definitions);
 
         smt_problem.add_assertion(&self.initial_condition, builder.clone());
         for _ in 0..length {
             // Must add variable definitions for each variable at each time step.
-            smt_problem.add_definitions(&self.state_variables, &self.actions, builder.clone());
+            smt_problem.add_variable_definitions(&self.state_variables, &self.actions, builder.clone());
             smt_problem.add_assertion(&self.transition_condition, builder.clone());
             builder.add_step();
         }
         // Don't forget the variable definitions at time `length`.
-        smt_problem.add_definitions(&self.state_variables, &self.actions, builder.clone());
+        smt_problem.add_variable_definitions(&self.state_variables, &self.actions, builder.clone());
         smt_problem.add_property_assertion(&self.property_condition, builder.clone());
         assert!(
             smt_problem.init_and_trans_length() == (length + 1).into(),
@@ -135,6 +147,7 @@ impl VMTModel {
 
     pub fn as_commands(&self) -> Vec<Command> {
         let mut commands = self.sorts.clone();
+        commands.extend(self.function_definitions.clone());
         for variable in self.state_variables.clone() {
             commands.extend(variable.as_commands());
         }
@@ -190,43 +203,11 @@ impl VMTModel {
         println!("Number of Sorts: {}", self.sorts.len());
     }
 
-    pub fn print_raw_smtlib2(&self) {
-        for sort in &self.sorts {
-            println!("{}", sort.clone().accept(&mut SyntaxBuilder).unwrap())
-        }
-        for var in &self.state_variables {
-            println!(
-                "{}",
-                var.current.clone().accept(&mut SyntaxBuilder).unwrap()
-            );
-        }
-        for action in &self.actions {
-            println!(
-                "{}",
-                action.action.clone().accept(&mut SyntaxBuilder).unwrap()
-            );
-        }
-        println!(
-            "INIT: {}",
-            self.initial_condition
-                .clone()
-                .accept(&mut SyntaxBuilder)
-                .unwrap()
-        );
-        println!(
-            "TRANS: {}",
-            self.transition_condition
-                .clone()
-                .accept(&mut SyntaxBuilder)
-                .unwrap()
-        );
-        println!(
-            "PROP: {}",
-            self.property_condition
-                .clone()
-                .accept(&mut SyntaxBuilder)
-                .unwrap()
-        );
+    pub fn as_vmt_string(&self) -> String {
+        self.as_commands()
+            .iter()
+            .map(|command| format!("{}", command.clone().accept(&mut SyntaxBuilder).unwrap()))
+            .join("\n")
     }
 
     fn get_all_current_variable_names(&self) -> Vec<String> {
