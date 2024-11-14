@@ -16,9 +16,21 @@ impl ArrayAbstractor {
     pub(crate) fn get_array_type_definitions(&self) -> Vec<Command> {
         let mut commands = vec![];
         for (index, value) in &self.array_types {
-            let arr_sort = Sort::Simple { identifier: Identifier::Simple { symbol: Symbol(format!("Array-{}-{}", index, value)) } };
-            let index_sort = Sort::Simple { identifier: Identifier::Simple { symbol: Symbol(format!("{}", index)) } };
-            let value_sort = Sort::Simple { identifier: Identifier::Simple { symbol: Symbol(format!("{}", value)) } };
+            let arr_sort = Sort::Simple {
+                identifier: Identifier::Simple {
+                    symbol: Symbol(format!("Array-{}-{}", index, value)),
+                },
+            };
+            let index_sort = Sort::Simple {
+                identifier: Identifier::Simple {
+                    symbol: Symbol(index.to_string()),
+                },
+            };
+            let value_sort = Sort::Simple {
+                identifier: Identifier::Simple {
+                    symbol: Symbol(value.to_string()),
+                },
+            };
             let sort_definition = Command::DeclareSort {
                 symbol: Symbol(format!("Array-{}-{}", index, value)),
                 arity: BigUint::zero(),
@@ -70,7 +82,7 @@ impl crate::rewriter::Rewriter for ArrayAbstractor {
                 if identifier.to_string() == "Array" {
                     crate::concrete::Sort::Simple {
                         identifier: Identifier::Simple {
-                            symbol: Symbol(format!("{}", "Array-Int-Int")),
+                            symbol: Symbol("Array-Int-Int".to_string()),
                         },
                     }
                 } else {
@@ -121,7 +133,7 @@ impl crate::rewriter::Rewriter for ArrayAbstractor {
 fn simple_identifier_with_name(name: &str) -> QualIdentifier {
     crate::concrete::QualIdentifier::Simple {
         identifier: Identifier::Simple {
-            symbol: Symbol(format!("{}", name)),
+            symbol: Symbol(name.to_string()),
         },
     }
 }

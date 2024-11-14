@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use action::Action;
 use array_abstractor::ArrayAbstractor;
@@ -8,10 +8,7 @@ use smt::SMTProblem;
 use utils::{get_transition_system_component, get_variables_and_actions};
 use variable::Variable;
 
-use crate::{
-    concrete::{Command, FunctionDec, Identifier, Sort, Symbol, SyntaxBuilder, Term},
-    lexer::Lexer,
-};
+use crate::concrete::{Command, FunctionDec, Identifier, Sort, Symbol, SyntaxBuilder, Term};
 
 static PROPERTY_ATTRIBUTE: &str = "invar-property";
 static TRANSITION_ATTRIBUTE: &str = "trans";
@@ -38,8 +35,13 @@ pub struct VMTModel {
     property_condition: Term,
 }
 
+#[derive(Debug)]
+pub enum VMTError {
+    UnknownCommand(String),
+}
+
 impl VMTModel {
-    pub fn checked_from(commands: Vec<Command>) -> Result<Self, ()> {
+    pub fn checked_from(commands: Vec<Command>) -> Result<Self, VMTError> {
         let number_of_commands = commands.len();
         assert!(number_of_commands > 3, "Not enough commands for VMT model!");
         let property_condition: Term =
@@ -63,7 +65,7 @@ impl VMTModel {
                         parameters,
                         sort: _,
                     } => {
-                        if parameters.len() == 0 {
+                        if parameters.is_empty() {
                             variable_commands.insert(symbol.0.clone(), command.clone());
                         } else {
                             function_definitions.push(command.clone());
@@ -78,9 +80,7 @@ impl VMTModel {
                     } => {
                         sorts.push(command.clone());
                     }
-                    _ => {
-                        panic!("Unknown VMT command: {:?}", command);
-                    }
+                    _ => return Err(VMTError::UnknownCommand(command.to_string())),
                 }
             }
         }
@@ -101,7 +101,6 @@ impl VMTModel {
     /// Clones the current model, rewrites all usages of Arrays into uninterpreted functions
     /// and returns the abstracted VMTModel.
     pub fn abstract_array_theory(&self) -> VMTModel {
-        let abstract_model = self.clone();
         let mut array_types: HashMap<String, String> = HashMap::new();
         array_types.insert("Int".to_string(), "Int".to_string());
         let mut abstractor = ArrayAbstractor {
@@ -109,7 +108,7 @@ impl VMTModel {
             array_types,
         };
         let mut abstracted_commands = vec![];
-        for command in abstract_model.as_commands() {
+        for command in self.as_commands() {
             abstracted_commands.push(command.accept(&mut abstractor).unwrap());
         }
         let mut array_definitions = abstractor.get_array_type_definitions();
@@ -129,7 +128,11 @@ impl VMTModel {
         smt_problem.add_assertion(&self.initial_condition, builder.clone());
         for _ in 0..length {
             // Must add variable definitions for each variable at each time step.
-            smt_problem.add_variable_definitions(&self.state_variables, &self.actions, builder.clone());
+            smt_problem.add_variable_definitions(
+                &self.state_variables,
+                &self.actions,
+                builder.clone(),
+            );
             smt_problem.add_assertion(&self.transition_condition, builder.clone());
             builder.add_step();
         }
@@ -156,11 +159,11 @@ impl VMTModel {
         }
         let init_command = Command::DefineFun {
             sig: FunctionDec {
-                name: Symbol(format!("init")),
+                name: Symbol("init".to_string()),
                 parameters: vec![],
                 result: Sort::Simple {
                     identifier: Identifier::Simple {
-                        symbol: Symbol(format!("Bool")),
+                        symbol: Symbol("Bool".to_string()),
                     },
                 },
             },
@@ -169,11 +172,11 @@ impl VMTModel {
         commands.push(init_command);
         let trans_command = Command::DefineFun {
             sig: FunctionDec {
-                name: Symbol(format!("trans")),
+                name: Symbol("trans".to_string()),
                 parameters: vec![],
                 result: Sort::Simple {
                     identifier: Identifier::Simple {
-                        symbol: Symbol(format!("Bool")),
+                        symbol: Symbol("Bool".to_string()),
                     },
                 },
             },
@@ -182,11 +185,11 @@ impl VMTModel {
         commands.push(trans_command);
         let prop_command = Command::DefineFun {
             sig: FunctionDec {
-                name: Symbol(format!("prop")),
+                name: Symbol("prop".to_string()),
                 parameters: vec![],
                 result: Sort::Simple {
                     identifier: Identifier::Simple {
-                        symbol: Symbol(format!("Bool")),
+                        symbol: Symbol("Bool".to_string()),
                     },
                 },
             },
